@@ -1,5 +1,5 @@
 const API_URL = "https://api.github.com/users/";
-const ACCESS_TOKEN = "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";
+const ACCESS_TOKEN = "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";
 
 const main = document.getElementById("main");
 const searchBox = document.getElementById("search");
