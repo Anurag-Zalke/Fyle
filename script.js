@@ -1,5 +1,5 @@
 const API_URL = "https://api.github.com/users/";
-const ACCESS_TOKEN = "ADD_TOKEN_HERE";
+const ACCESS_TOKEN = process.env.GITHUB_TOKEN;
 
 const main = document.getElementById("main");
 const searchBox = document.getElementById("search");
