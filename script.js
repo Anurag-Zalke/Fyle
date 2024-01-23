@@ -1,6 +1,4 @@
 const API_URL = "https://api.github.com/users/";
-const ACCESS_TOKEN = GITHUB_TOKEN;
-
 const main = document.getElementById("main");
 const searchBox = document.getElementById("search");
 const userLoader = document.getElementById("userLoader");
@@ -12,13 +10,10 @@ let perPage = 10; // Default value for repositories per page
 
 const getUser = async (inputUsername) => {
     try {
+        console.log(inputUsername)
         userLoader.style.display = "block"; // Show user loader
 
-        const response = await fetch(API_URL + inputUsername, {
-            headers: {
-                Authorization: `Bearer ${ACCESS_TOKEN}`,
-            },
-        });
+        const response = await fetch(API_URL + inputUsername);
 
         userLoader.style.display = "none"; // Hide user loader
 
@@ -55,8 +50,8 @@ const getUser = async (inputUsername) => {
         createPagination(username, currentPage, perPage);
     } catch (error) {
         userLoader.style.display = "none"; // Hide user loader
-        console.log(error.response.status);
-        if (error.response.status == 404) {
+        console.error(error);
+        if (error.response && error.response.status === 404) {
             createErrorCard('No profile with this Username');
         } else {
             createErrorCard('Error fetching user data');
@@ -68,11 +63,7 @@ const getRepos = async (username, page = 1, perPage = 10) => {
     try {
         repoLoader.style.display = "block"; // Show repo loader
 
-        const response = await fetch(`${API_URL}${username}/repos?page=${page}&per_page=${perPage}`, {
-            headers: {
-                Authorization: `Bearer ${ACCESS_TOKEN}`,
-            },
-        });
+        const response = await fetch(`${API_URL}${username}/repos?page=${page}&per_page=${perPage}`);
 
         const reposData = await response.json();
 
@@ -154,14 +145,13 @@ const createPagination = (username, currentPage, perPage) => {
 
     // Display the current page information
     const pageInfo = document.createElement("span");
-    pageInfo.innerHTML = `<div class="page-display">Page <span id="currentPage">${currentPage}</span></div>`;
+    pageInfo.innerHTML = `<div class="pageDisplay">Page <span id="currentPage">${currentPage}</span></div>`;
 
     // Append the elements to the pagination container in the desired order
     paginationContainer.appendChild(prevButton);
     paginationContainer.appendChild(pageInfo);
     paginationContainer.appendChild(nextButton);
 };
-
 
 const changePage = (delta) => {
     currentPage += delta;
@@ -173,7 +163,6 @@ const changePage = (delta) => {
     // Update the pagination information
     updatePaginationInfo();
 };
-
 
 const updatePaginationInfo = () => {
     const currentPageElement = document.getElementById("currentPage");
